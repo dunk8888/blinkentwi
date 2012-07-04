@@ -1,0 +1,3 @@
+[submodule "lib/usitwi"]
+	path = lib/usitwi
+	url = git://github.com/niclashoyer/usitwi.git
