@@ -23,18 +23,15 @@ typedef struct {
 static volatile uint8_t valbuffer[7];
 static volatile uint8_t valcnt = 0;
 
-void test() {
-	PORTB = 0xFF;
+void toRGBNow() {
 }
 
-void test2() {
-	PORTB = 0x00;
+void getRGB() {
 }
-
 
 const rgbcmd cmdlist[2] PROGMEM = {
-	{0x42, 1, 1, test},
-	{0x77, 3, 0, test2}
+	{0x6e, 3, 0, toRGBNow},
+	{0x67, 0, 3, getRGB}
 };
 
 void usitwi_onStart(uint8_t read) {
