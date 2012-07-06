@@ -2,26 +2,20 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 #include "../lib/usitwi/src/slave.h"
 
 typedef enum {
-	RGBCMD_READ_CMD_BYTE,
-	RGBCMD_READ_PARAM_BYTE,
-	RGBCMD_WRITE_RETURN_BYTE
-} rgbstate_t;
+	CMDSTATE_READ_CMD_BYTE,
+	CMDSTATE_READ_PARAM_BYTE,
+	CMDSTATE_WRITE_RETURN_BYTE
+} cmd_state_t;
 
-static volatile rgbstate_t rgbstate = RGBCMD_READ_CMD_BYTE;
+static volatile cmd_state_t cmd_state = CMDSTATE_READ_CMD_BYTE;
 
-typedef struct {
-	uint8_t cmd;
-	uint8_t args;
-	uint8_t retvals;
-	void (*function)();
-} rgbcmd;
-
-static volatile uint8_t valbuffer[7];
-static volatile uint8_t valcnt = 0;
+static volatile uint8_t cmd_buffer[7];
+static volatile uint8_t cmd_args = 0;
+static volatile uint8_t cmd_rets = 0;
+static void           (*cmd_function)();
 
 void toRGBNow() {
 }
@@ -29,51 +23,54 @@ void toRGBNow() {
 void getRGB() {
 }
 
-const rgbcmd cmdlist[] PROGMEM = {
-	{0x6e, 3, 0, toRGBNow},
-	{0x67, 0, 3, getRGB}
-};
-
-inline uint8_t lookupcmd(uint8_t value, rgbcmd* cmd) {
-	uint8_t i;
-	for (i=0; i<sizeof(cmdlist); i++) {
-		memcpy_P(cmd, &cmdlist[i], sizeof(rgbcmd));
-		if (cmd->cmd == value) {
-			return 1;
-		}
+inline void cmd_lookup(uint8_t cmd) {
+	switch(cmd) {
+		case 0x6e:
+			cmd_args = 3;
+			cmd_rets = 0;
+			cmd_function = toRGBNow;
+		break;
+		case 0x67:
+			cmd_args = 0;
+			cmd_rets = 3;
+			cmd_function = getRGB;
+		break;
+		default:
+			cmd_function = 0;
+		break;
 	}
-	return 0;
 }
 
 void usitwi_onStart(uint8_t read) {
 }
 
 void usitwi_onStop() {
+	cmd_state = CMDSTATE_READ_CMD_BYTE;
 }
 
 uint8_t usitwi_onRead() {
 }
 
 void usitwi_onWrite(uint8_t value) {
-	rgbcmd cmd;
-	switch(rgbstate) {
-		case RGBCMD_READ_CMD_BYTE:
-			if (lookupcmd(value, &cmd)) {
-				if (cmd.args == 0) {
-					cmd.function();
-					if (cmd.retvals > 0) {
-						valcnt = cmd.retvals;
-						rgbstate = RGBCMD_WRITE_RETURN_BYTE;
+	switch(cmd_state) {
+		case CMDSTATE_READ_CMD_BYTE:
+			cmd_lookup(value);
+			if (cmd_function != 0) {
+				if (cmd_args == 0) {
+					cmd_function();
+					if (cmd_rets > 0) {
+						cmd_state = CMDSTATE_WRITE_RETURN_BYTE;
+					} else {
+						cmd_state = CMDSTATE_READ_CMD_BYTE;
 					}
 				} else {
-					valcnt = cmd.args;
-					rgbstate = RGBCMD_READ_PARAM_BYTE;
+					cmd_state = CMDSTATE_READ_PARAM_BYTE;
 				}
 			}
 		break;
-		case RGBCMD_READ_PARAM_BYTE:
+		case CMDSTATE_READ_PARAM_BYTE:
 		break;
-		case RGBCMD_WRITE_RETURN_BYTE:
+		case CMDSTATE_WRITE_RETURN_BYTE:
 		break;
 	}
 }
