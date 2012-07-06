@@ -24,13 +24,13 @@ void getRGB() {
 }
 
 inline void cmd_lookup(uint8_t cmd) {
-	if (cmd == 0x6e) {
-			cmd_args = 3;
-			cmd_rets = 0;
-			cmd_function = toRGBNow;
-	} else if (cmd == 0x67) {
-		cmd_args = 0;
-		cmd_rets = 3;
+	if        ( cmd == 0x6e ) {
+		cmd_args     = 3;
+		cmd_rets     = 0;
+		cmd_function = toRGBNow;
+	} else if ( cmd == 0x67 ) {
+		cmd_args     = 0;
+		cmd_rets     = 3;
 		cmd_function = getRGB;
 	} else {
 		cmd_function = 0;
