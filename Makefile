@@ -11,7 +11,7 @@ compile:
 	$(AVRSIZE) -A -t out/blinkentwi.elf
 
 program:
-	$(AVRDUDE) -c usbasp -p $(MMCU) -v -e -U flash:w:out/blinkentwi.hex
+	$(AVRDUDE) -p $(MMCU) -v -e -U flash:w:out/blinkentwi.hex
 
 clean:
 	rm -f out/*.o out/*.elf out/*.hex
