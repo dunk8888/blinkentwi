@@ -1,7 +1,7 @@
 MMCU=attiny85
 CC=avr-gcc
 OBJCPY=avr-objcopy
-AVRDUDE=sudo avrdude
+AVRDUDE=avrdude
 AVRSIZE=avr-size
 
 compile:
