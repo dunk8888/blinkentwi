@@ -24,20 +24,16 @@ void getRGB() {
 }
 
 inline void cmd_lookup(uint8_t cmd) {
-	switch(cmd) {
-		case 0x6e:
-			cmd_args = 3;
-			cmd_rets = 0;
-			cmd_function = toRGBNow;
-		break;
-		case 0x67:
-			cmd_args = 0;
-			cmd_rets = 3;
-			cmd_function = getRGB;
-		break;
-		default:
-			cmd_function = 0;
-		break;
+	if        ( cmd == 0x6e ) {
+		cmd_args     = 3;
+		cmd_rets     = 0;
+		cmd_function = toRGBNow;
+	} else if ( cmd == 0x67 ) {
+		cmd_args     = 0;
+		cmd_rets     = 3;
+		cmd_function = getRGB;
+	} else {
+		cmd_function = 0;
 	}
 }
 
@@ -52,26 +48,22 @@ uint8_t usitwi_onRead() {
 }
 
 void usitwi_onWrite(uint8_t value) {
-	switch(cmd_state) {
-		case CMDSTATE_READ_CMD_BYTE:
-			cmd_lookup(value);
-			if (cmd_function != 0) {
-				if (cmd_args == 0) {
-					cmd_function();
-					if (cmd_rets > 0) {
-						cmd_state = CMDSTATE_WRITE_RETURN_BYTE;
-					} else {
-						cmd_state = CMDSTATE_READ_CMD_BYTE;
-					}
+	if (cmd_state == CMDSTATE_READ_CMD_BYTE) {
+		cmd_lookup(value);
+		if (cmd_function != 0) {
+			if (cmd_args == 0) {
+				cmd_function();
+				if (cmd_rets > 0) {
+					cmd_state = CMDSTATE_WRITE_RETURN_BYTE;
 				} else {
-					cmd_state = CMDSTATE_READ_PARAM_BYTE;
+					cmd_state = CMDSTATE_READ_CMD_BYTE;
 				}
+			} else {
+				cmd_state = CMDSTATE_READ_PARAM_BYTE;
 			}
-		break;
-		case CMDSTATE_READ_PARAM_BYTE:
-		break;
-		case CMDSTATE_WRITE_RETURN_BYTE:
-		break;
+		}
+	} else if (cmd_state == CMDSTATE_READ_PARAM_BYTE) {
+	} else if (cmd_state == CMDSTATE_WRITE_RETURN_BYTE) {
 	}
 }
 
