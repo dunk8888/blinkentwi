@@ -46,5 +46,4 @@ extern volatile uint8_t rgb_pwm_red;
 #define rgb_get_blue() OCR1B
 #endif
 
-
 #endif
