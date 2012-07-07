@@ -2,6 +2,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "../lib/usitwi/src/slave.h"
 #include "rgb/rgb.h"
 
 uint8_t usitwi_address = 0x42;

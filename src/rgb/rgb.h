@@ -23,7 +23,7 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 #define _BLINKEN_TWI_RGB_H_
 
 #define rgb_init() {\
-	PORTB = (1 << PB1) | (1 << PB3) | (1 << PB4); \
+	DDRB = (1 << PB1) | (1 << PB3) | (1 << PB4); \
 }
 
 #endif

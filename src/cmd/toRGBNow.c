@@ -24,6 +24,6 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 extern volatile uint8_t cmd_buffer[7];
 
 void toRGBNow() {
-	
+	PORTB ^= (1 << PB1);
 }
 
