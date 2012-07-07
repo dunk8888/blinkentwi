@@ -19,8 +19,6 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-extern volatile uint8_t rgb_pwm_red;
-
 #ifndef _BLINKEN_TWI_RGB_H_
 #define _BLINKEN_TWI_RGB_H_
 
@@ -30,10 +28,16 @@ extern volatile uint8_t rgb_pwm_red;
     defined( __AVR_ATtiny45__ ) | \
     defined( __AVR_ATtiny85__ )
 #define rgb_init() {\
-	DDRB = (1 << PB1) | (1 << PB3) | (1 << PB4); \
+	DDRB   = (1 << PB1) | (1 << PB3) | (1 << PB4); \
+	OCR1C  = 0xFF; \
+	TCCR1  = (1 << PWM1A) | (1 << COM1A1) | (1 << CS13) | (1 << CS10); \
+	GTCCR  = (1 << PWM1B) | (1 << COM1B1); \
+	TCCR0A = (1 << WGM01) | (1 << WGM00); \
+	TCCR0B = (1 << CS02); \
+	TIMSK  = (1 << OCIE0A) | (1 << TOIE0); \
 }
 #define rgb_set_red(X) { \
-	rgb_pwm_red = X; \
+	OCR0A = X; \
 }
 #define rgb_set_green(X) { \
 	OCR1A = X; \
@@ -41,7 +45,7 @@ extern volatile uint8_t rgb_pwm_red;
 #define rgb_set_blue(X) { \
 	OCR1B = X; \
 }
-#define rgb_get_red() rgb_pwm_red
+#define rgb_get_red() OCR0A
 #define rgb_get_green() OCR1A
 #define rgb_get_blue() OCR1B
 #endif

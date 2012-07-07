@@ -20,11 +20,24 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "rgb.h"
-
-volatile uint8_t rgb_pwm_red   = 0;
 
 volatile uint8_t rgb_pwm_target_red   = 0;
 volatile uint8_t rgb_pwm_target_green = 0;
 volatile uint8_t rgb_pwm_target_blue  = 0;
+
+#if defined( __AVR_ATtiny25__ ) | \
+    defined( __AVR_ATtiny45__ ) | \
+    defined( __AVR_ATtiny85__ )
+
+ISR(TIMER0_OVF_vect) {
+	PORTB |= (1 << PB3);
+}
+
+ISR(TIMER0_COMPA_vect) {
+	PORTB &= ~(1 << PB3);
+}
+
+#endif
 
