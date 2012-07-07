@@ -32,7 +32,9 @@ volatile uint8_t rgb_pwm_target_blue  = 0;
     defined( __AVR_ATtiny85__ )
 
 ISR(TIMER0_OVF_vect) {
-	PORTB |= (1 << PB3);
+	if (OCR0A != 0) {
+		PORTB |= (1 << PB3);
+	}
 }
 
 ISR(TIMER0_COMPA_vect) {
