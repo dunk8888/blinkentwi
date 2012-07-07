@@ -20,10 +20,13 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <avr/io.h>
+#include "../rgb/rgb.h"
 
 extern volatile uint8_t cmd_buffer[7];
 
 void toRGBNow() {
-	PORTB ^= (1 << PB1);
+	rgb_set_red(cmd_buffer[0]);
+	rgb_set_green(cmd_buffer[1]);
+	rgb_set_blue(cmd_buffer[2]);
 }
 

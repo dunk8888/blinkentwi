@@ -19,11 +19,32 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+extern volatile uint8_t rgb_pwm_red;
+
 #ifndef _BLINKEN_TWI_RGB_H_
 #define _BLINKEN_TWI_RGB_H_
 
+#include <avr/io.h>
+
+#if defined( __AVR_ATtiny25__ ) | \
+    defined( __AVR_ATtiny45__ ) | \
+    defined( __AVR_ATtiny85__ )
 #define rgb_init() {\
 	DDRB = (1 << PB1) | (1 << PB3) | (1 << PB4); \
 }
+#define rgb_set_red(X) { \
+	rgb_pwm_red = X; \
+}
+#define rgb_set_green(X) { \
+	OCR1A = X; \
+}
+#define rgb_set_blue(X) { \
+	OCR1B = X; \
+}
+#define rgb_get_red() rgb_pwm_red
+#define rgb_get_green() OCR1A
+#define rgb_get_blue() OCR1B
+#endif
+
 
 #endif

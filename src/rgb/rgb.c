@@ -20,12 +20,11 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <avr/io.h>
-#include "../rgb/rgb.h"
+#include "rgb.h"
 
-extern volatile uint8_t cmd_buffer[7];
+volatile uint8_t rgb_pwm_red   = 0;
 
-void getRGB() {
-	cmd_buffer[0] = rgb_get_red();
-	cmd_buffer[1] = rgb_get_green();
-	cmd_buffer[2] = rgb_get_blue();
-}
+volatile uint8_t rgb_pwm_target_red   = 0;
+volatile uint8_t rgb_pwm_target_green = 0;
+volatile uint8_t rgb_pwm_target_blue  = 0;
+
