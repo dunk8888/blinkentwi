@@ -24,6 +24,10 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <avr/io.h>
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a):(b))
+#endif
+
 #if defined( __AVR_ATtiny25__ ) | \
     defined( __AVR_ATtiny45__ ) | \
     defined( __AVR_ATtiny85__ )

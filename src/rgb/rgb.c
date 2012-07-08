@@ -26,12 +26,30 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 volatile uint8_t rgb_pwm_target_red   = 0;
 volatile uint8_t rgb_pwm_target_green = 0;
 volatile uint8_t rgb_pwm_target_blue  = 0;
+volatile uint8_t rgb_pwm_fade         = 0;
+
+#define rgb_fade(X, Y) { \
+	if (X != Y) { \
+		if (X > Y) { \
+			X -= min(X - Y, rgb_pwm_fade); \
+		} else { \
+			X += min(X - Y, rgb_pwm_fade); \
+		} \
+	} \
+} \
 
 #if defined( __AVR_ATtiny25__ ) | \
     defined( __AVR_ATtiny45__ ) | \
     defined( __AVR_ATtiny85__ )
 
 ISR(TIMER0_OVF_vect) {
+	
+	if (rgb_pwm_fade > 0) {
+		rgb_fade(rgb_get_red(),   rgb_pwm_target_red);
+		rgb_fade(rgb_get_green(), rgb_pwm_target_green);
+		rgb_fade(rgb_get_blue(),  rgb_pwm_target_blue);
+	}
+
 	if (OCR0A != 0) {
 		PORTB |= (1 << PB3);
 	}
