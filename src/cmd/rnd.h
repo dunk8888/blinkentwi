@@ -19,9 +19,21 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef _BLINKEN_TWI_H_
-#define _BLINKEN_TWI_H_
+#ifndef _BLINKEN_TWI_RND_H_
+#define _BLINKEN_TWI_RND_H_
 
-#define get_blinkentwi_version() 0x01
+#include <avr/io.h>
+#include <stdlib.h>
+
+#define rnd_init() { \
+	unsigned short *p = (unsigned short*) (RAMEND+1); \
+	extern unsigned short __heap_start; \
+	while (p >= &__heap_start + 1) { \
+		seed ^= * (--p); \
+	} \
+	srand(seed); \
+}
+
+#define rnd_get() rand()
 
 #endif

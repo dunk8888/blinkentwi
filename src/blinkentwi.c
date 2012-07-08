@@ -23,8 +23,9 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "../lib/usitwi/src/slave.h"
+#include "blinkentwi.h"
 #include "rgb/rgb.h"
+#include "../lib/usitwi/src/slave.h"
 
 uint8_t usitwi_address = 0x42;
 

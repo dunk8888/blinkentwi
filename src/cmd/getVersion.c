@@ -19,9 +19,13 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef _BLINKEN_TWI_H_
-#define _BLINKEN_TWI_H_
+#include <avr/io.h>
+#include "../blinkentwi.h"
 
-#define get_blinkentwi_version() 0x01
+extern volatile uint8_t cmd_buffer[7];
 
-#endif
+void getVersion() {
+	cmd_buffer[0] = get_blinkentwi_version();
+}
+
+

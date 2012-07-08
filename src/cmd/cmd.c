@@ -26,12 +26,22 @@ volatile int8_t  cmd_args = 0;
 volatile int8_t  cmd_rets = 0;
 void           (*cmd_function)();
 
+extern void getVersion();
+extern void fadeToRandomRGB();
 extern void fadeToRGB();
 extern void getRGB();
 extern void toRGBNow();
 
 void cmd_lookup(uint8_t cmd) {
-	if        ( cmd == 0x63 ) {
+	if        ( cmd == 0x5a ) {
+		cmd_args     = -1;
+		cmd_rets     = 0;
+		cmd_function = getVersion;
+	} else if ( cmd == 0x43 ) {
+		cmd_args     = -1;
+		cmd_rets     = -1;
+		cmd_function = fadeToRandomRGB;
+	} else if ( cmd == 0x67 ) {
 		cmd_args     = 2;
 		cmd_rets     = -1;
 		cmd_function = fadeToRGB;

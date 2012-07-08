@@ -19,9 +19,18 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef _BLINKEN_TWI_H_
-#define _BLINKEN_TWI_H_
+#include <avr/io.h>
+#include "rnd.h"
 
-#define get_blinkentwi_version() 0x01
+extern volatile uint8_t rgb_pwm_target_red;
+extern volatile uint8_t rgb_pwm_target_green;
+extern volatile uint8_t rgb_pwm_target_blue;
+extern volatile uint8_t rgb_pwm_fade;
 
-#endif
+void fadeToRandomRGB() {
+	rgb_pwm_target_red   = rnd_get();
+	rgb_pwm_target_green = rnd_get();
+	rgb_pwm_target_blue  = rnd_get();
+	rgb_pwm_fade = 1;
+}
+
