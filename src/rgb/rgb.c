@@ -33,7 +33,7 @@ volatile uint8_t rgb_pwm_fade         = 0;
 		if (X > Y) { \
 			X -= min(X - Y, rgb_pwm_fade); \
 		} else { \
-			X += min(X - Y, rgb_pwm_fade); \
+			X += min(Y - X, rgb_pwm_fade); \
 		} \
 	} \
 } \

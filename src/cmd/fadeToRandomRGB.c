@@ -20,7 +20,7 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <avr/io.h>
-#include "rnd.h"
+#include "../rnd/rnd.h"
 
 extern volatile uint8_t rgb_pwm_target_red;
 extern volatile uint8_t rgb_pwm_target_green;
@@ -28,9 +28,12 @@ extern volatile uint8_t rgb_pwm_target_blue;
 extern volatile uint8_t rgb_pwm_fade;
 
 void fadeToRandomRGB() {
-	rgb_pwm_target_red   = rnd_get();
-	rgb_pwm_target_green = rnd_get();
-	rgb_pwm_target_blue  = rnd_get();
+	uint32_t rnd = rnd_get();
+	rgb_pwm_target_red   = rnd & 0xFF;
+	rnd = rnd >> 8;
+	rgb_pwm_target_green = rnd & 0xFF;
+	rnd = rnd >> 8;
+	rgb_pwm_target_blue  = rnd & 0xFF;
 	rgb_pwm_fade = 1;
 }
 

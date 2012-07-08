@@ -25,11 +25,13 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 #include <avr/interrupt.h>
 #include "blinkentwi.h"
 #include "rgb/rgb.h"
+#include "rnd/rnd.h"
 #include "../lib/usitwi/src/slave.h"
 
 uint8_t usitwi_address = 0x42;
 
 int main() {
+	rnd_init();
 	rgb_init();
 	usitwi_init();
 	sei();

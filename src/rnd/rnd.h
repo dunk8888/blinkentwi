@@ -26,14 +26,15 @@ along with Blinkentwi.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 
 #define rnd_init() { \
+	unsigned short seed = 0; \
 	unsigned short *p = (unsigned short*) (RAMEND+1); \
 	extern unsigned short __heap_start; \
 	while (p >= &__heap_start + 1) { \
 		seed ^= * (--p); \
 	} \
-	srand(seed); \
+	srandom(seed); \
 }
 
-#define rnd_get() rand()
+#define rnd_get() random()
 
 #endif
