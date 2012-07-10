@@ -41,7 +41,7 @@ void cmd_lookup(uint8_t cmd) {
 		cmd_args     = -1;
 		cmd_rets     = -1;
 		cmd_function = fadeToRandomRGB;
-	} else if ( cmd == 0x67 ) {
+	} else if ( cmd == 0x63 ) {
 		cmd_args     = 2;
 		cmd_rets     = -1;
 		cmd_function = fadeToRGB;
