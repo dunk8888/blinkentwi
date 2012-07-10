@@ -43,20 +43,23 @@ volatile uint8_t rgb_pwm_fade         = 0;
     defined( __AVR_ATtiny85__ )
 
 ISR(TIMER0_OVF_vect) {
-	
 	if (rgb_pwm_fade > 0) {
 		rgb_fade(rgb_get_red(),   rgb_pwm_target_red);
 		rgb_fade(rgb_get_green(), rgb_pwm_target_green);
 		rgb_fade(rgb_get_blue(),  rgb_pwm_target_blue);
 	}
+}
 
-	if (OCR0A != 0) {
+ISR(TIMER0_COMPA_vect) {
+	if (rgb_get_red() != 0) {
 		PORTB |= (1 << PB3);
 	}
 }
 
-ISR(TIMER0_COMPA_vect) {
-	PORTB &= ~(1 << PB3);
+ISR(TIMER0_COMPB_vect) {
+	if (rgb_get_red() != 0xFF) {
+		PORTB &= ~(1 << PB3);
+	}
 }
 
 #endif
